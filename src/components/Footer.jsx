@@ -1,6 +1,12 @@
+import styles from "./Footer.module.scss";
+
+
+
 function Footer() {
   return (
-    <h1 className="b2">footer</h1>
+   <footer className={`${styles.footer} d-flex flex-row align-items-center justify-content-center p-20`}>
+    <p>Copyright © Pingucoder, Inc 2024  </p>
+   </footer>
   )
 }
 
