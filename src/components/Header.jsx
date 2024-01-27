@@ -4,7 +4,7 @@ import recetteTr from "../assets/images/recetteTr.png"
 
 function Header() {
   return (
-  <header className={`${styles.Header} d-flex flex-row align-items-center`}>
+  <header className={`${styles.header} d-flex flex-row align-items-center`}>
     <i className="fa-solid fa-bars mr-15"></i>
     <div className="flex-fill">
       <img src={recetteTr} alt="logo recette" />
@@ -14,7 +14,7 @@ function Header() {
       <i className="fa-solid fa-basket-shopping mr-5"></i>
       <span>panier</span>
       </button>
-      <button className="btn btn-primary"></button>
+      <button className="btn btn-primary">connexion</button>
     </ul>
   </header>
   );
