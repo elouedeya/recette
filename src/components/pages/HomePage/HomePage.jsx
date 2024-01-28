@@ -1,15 +1,38 @@
 import styles from "./HomePage.module.scss";
 import Recipe from "./components/Recipe/Recipe";
 
-import { useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import Loading from "../../Loading/Loading";
+import { ApiContext } from "../../../context/ApiContext";
 
 function HomePage() {
- 
   const [recipes, setRecipes] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [filter, setFilter] = useState("");
 
+  const BASE_URL_API = useContext(ApiContext);
+
+  useEffect(() => {
+    let cancel = false;
+    async function fetchRecipes() {
+      try {
+        setIsLoading(true);
+        const response = await fetch(BASE_URL_API);
+        if (response.ok && !cancel) {
+          const recipes = await response.json();
+          setRecipes(Array.isArray(recipes) ? recipes : [recipes]);
+        }
+      } catch (e) {
+        console.log('ERREUR');
+      } finally {
+        if(!cancel){
+          setIsLoading(false)
+        }
+      }
+    }
+    fetchRecipes();
+    return  () => (cancel = true); 
+  }, [BASE_URL_API]);
   function handelInput(e) {
     const filter = e.target.value;
 
