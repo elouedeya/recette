@@ -1,14 +1,16 @@
 import styles from "./HomePage.module.scss";
 import Recipe from "./components/Recipe/Recipe";
-import { data } from "../../../data/recipes";
+
 import { useState } from "react";
+import Loading from "../../Loading/Loading";
 
 function HomePage() {
-  const recipes = data;
+ 
+  const [recipes, setRecipes] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [filter, setFilter] = useState("");
 
   function handelInput(e) {
-
     const filter = e.target.value;
 
     setFilter(filter.trim().toLowerCase());
@@ -28,13 +30,17 @@ function HomePage() {
             placeholder="Recherche"
           />
         </div>
-        <div className={styles.grid}>
-          {recipes
-            .filter((r) => r.title.toLowerCase().startsWith(filter))
-            .map((r) => (
-              <Recipe key={r._id} title={r.title} image={r.image} />
-            ))}
-        </div>
+        {isLoading && !recipes.length ? (
+          <Loading />
+        ) : (
+          <div className={styles.grid}>
+            {recipes
+              .filter((r) => r.title.toLowerCase().startsWith(filter))
+              .map((r) => (
+                <Recipe key={r._id} title={r.title} image={r.image} />
+              ))}
+          </div>
+        )}
       </div>
     </div>
   );
