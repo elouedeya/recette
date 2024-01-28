@@ -1,7 +1,7 @@
 import styles from "./Header.module.scss";
-import recetteTr from "../assets/images/recetteTr.png";
+import recetteTr from "../../assets/images/recetteTr.png";
 import { useState } from "react";
-import HeaderMenu from "./HeaderMenu";
+import HeaderMenu from "./components/HeaderMenu";
 
 function Header() {
   const [showMenu, setShowMenu] = useState(false);

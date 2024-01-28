@@ -1,9 +1,9 @@
-import styles from "./Content.module.scss";
-import Recipe from "./Recipe";
-import { data } from "../data/recipes";
+import styles from "./HomePage.module.scss";
+import Recipe from "./components/Recipe/Recipe";
+import { data } from "../../../data/recipes";
 import { useState } from "react";
 
-function Content() {
+function HomePage() {
   const recipes = data;
   const [filter, setFilter] = useState("");
 
@@ -40,4 +40,4 @@ function Content() {
   );
 }
 
-export default Content;
+export default HomePage;
