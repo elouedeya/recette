@@ -1,15 +1,35 @@
 import styles from "./Recipe.module.scss";
-import { useState } from "react";
+import { useContext } from "react";
+import { ApiContext } from "../../../../../context/ApiContext";
 
-function Recipe({title, image}) {
+function Recipe({recipe: {title, image, liked, _id}, toggleLikedRecipe}) {
+  const BASE_URL_API = useContext(ApiContext);
 
-    const [liked, setLiked] = useState(false);
-    function handleClick()
+   
+     async function  handleClick()
     {
-        setLiked(!liked);
+      try {
+        const response = await fetch(`${BASE_URL_API}/${_id}`, {
+          method: 'PATCH', 
+          headers: {
+            'Content-Type': 'application/json',
+
+          },
+          body: JSON.stringify({ liked: !liked })
+
+        });
+        if(response.ok){
+          const updateRecipe = await  response.json();
+          toggleLikedRecipe(updateRecipe)
+        }
+      } catch (e) {
+        console.log('Erreur')
+      }
     }
+
+    
   return (
-    <div className={styles.recipe} onClick={handleClick}>
+    <div onClick={handleClick}  className={styles.recipe} >
       <div className={styles.imageContainer}>
         <img src={image} alt={title} />
       </div>
