@@ -1,14 +1,16 @@
+
+import { useContext, useEffect, useState } from "react";
 import styles from "./HomePage.module.scss";
 import Recipe from "./components/Recipe/Recipe";
 
-import { useContext, useEffect, useState } from "react";
 import Loading from "../../Loading/Loading";
 import { ApiContext } from "../../../context/ApiContext";
 
-function HomePage() {
+export default function HomePage() {
   const [recipes, setRecipes] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [filter, setFilter] = useState("");
+  const [page, setPage] = useState(1);
 
   const BASE_URL_API = useContext(ApiContext);
 
@@ -17,11 +19,15 @@ function HomePage() {
     async function fetchRecipes() {
       try {
         setIsLoading(true);
-        const response = await fetch(BASE_URL_API);
+        const response = await fetch(`${BASE_URL_API}?skip=${(page-1)*18}&limit=18`);
+
         if (response.ok && !cancel) {
-          const recipes = await response.json();
-          setRecipes(Array.isArray(recipes) ? recipes : [recipes]);
-        }
+          const newRecipes = await response.json();
+          setRecipes( (x)=>
+          Array.isArray(newRecipes) 
+          ? [...x, ...newRecipes]
+          :[...x, newRecipes]
+  )}
       } catch (e) {
         console.log("ERREUR");
       } finally {
@@ -32,7 +38,7 @@ function HomePage() {
     }
     fetchRecipes();
     return () => (cancel = true);
-  }, [BASE_URL_API]);
+  }, [BASE_URL_API, page]);
 
   function handelInput(e) {
     const filter = e.target.value;
@@ -48,7 +54,10 @@ function HomePage() {
 
   return (
     <div className="flex-fill container p-20">
-      <h1 className="my-30">Découvrez nos nouvelles recettes </h1>
+      <h1 className="my-30">Découvrez nos nouvelles recettes
+      <small className={styles.small}>- {recipes.length}</small>
+       </h1>
+
       <div className={`card p-20 ${styles.contentCard}`}>
         <div
           className={`d-flex flex-row justify-content-center align-item-center my-30 ${styles.searchBar}`}
@@ -77,9 +86,11 @@ function HomePage() {
               ))}
           </div>
         )}
+        <div className="d-flex flex-row justify-content-center align-items-center p-20">
+          <button onClick={()=>setPage(page+1)} className="btn btn-primary"> Charger plus de recettes</button>
+          </div>
       </div>
     </div>
   );
 }
 
-export default HomePage;
